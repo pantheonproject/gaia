@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/pantheonproject/gaia/internal/app"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/pantheonproject/gaia/internal/cmd"
 )
 
 func Test_main(t *testing.T) {
@@ -15,7 +16,7 @@ func Test_main(t *testing.T) {
 		return fmt.Errorf("some error")
 	}
 	defer func() {
-		startFunc = app.Start
+		startFunc = cmd.Execute
 	}()
 	main()
 	assert.Equal(t, 1, ranCount)

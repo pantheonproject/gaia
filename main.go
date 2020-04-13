@@ -1,9 +1,9 @@
 package main
 
-import "github.com/pantheonproject/gaia/internal/app"
+import "github.com/pantheonproject/gaia/internal/cmd"
 
-var startFunc = app.Start
+var startFunc = cmd.Execute
 
 func main() {
-	startFunc()
+	_ = startFunc()
 }
