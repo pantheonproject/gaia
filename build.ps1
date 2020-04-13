@@ -1,0 +1,1 @@
+go build -ldflags "-X github.com/pantheonproject/gaia/buildvars.Version=v1.0.0"

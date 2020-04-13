@@ -9,15 +9,6 @@ import (
 
 var defaultLogger = func() dependencies.Logger { l, _ := zap.NewProduction(); return l }()
 
-// Execute runs the cobra commander
-func Execute() error {
-	r, err := newRootCmd()
-	if err != nil {
-		return err
-	}
-	return r.cmd.Execute()
-}
-
 type rootCmd struct {
 	cmd    *cobra.Command
 	logger dependencies.Logger
@@ -34,7 +25,7 @@ func newRootCmd() (*rootCmd, error) {
 	cmd := &cobra.Command{
 		Use:   "gaia",
 		Short: "Gaia is a template for Go microservices",
-		Long:  "A fully functional microservice which serves as a template for other services, with established service wrapping+ configuration loading, gRPC/TLS/data-access patterns, etc.",
+		Long:  "A very simple but functional microservice which serves as a template for other services, with established service wrapping, configuration loading, gRPC/TLS/data-access patterns, etc.",
 		Run: func(cmd *cobra.Command, args []string) {
 			// Root command logic, for no verbs passed in
 			h, err := app.New()
@@ -50,6 +41,10 @@ func newRootCmd() (*rootCmd, error) {
 		},
 	}
 	r.cmd = cmd
+	err = r.setupVersionCmd()
+	if err != nil {
+		return nil, err
+	}
 	return r, nil
 }
 
