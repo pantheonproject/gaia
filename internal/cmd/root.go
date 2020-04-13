@@ -7,6 +7,8 @@ import (
 	"go.uber.org/zap"
 )
 
+var defaultLogger = func() dependencies.Logger { l, _ := zap.NewProduction(); return l }()
+
 // Execute runs the cobra commander
 func Execute() error {
 	r, err := newRootCmd()
@@ -37,16 +39,26 @@ func newRootCmd() (*rootCmd, error) {
 			// Root command logic, for no verbs passed in
 			h, err := app.New()
 			if err != nil {
-				r.logger.Error("Failed to create application handle", zap.Error(err))
+				r.getLogger().Error("Failed to create application handle", zap.Error(err))
 				return
 			}
 			err = h.Run()
 			if err != nil {
-				r.logger.Error("Failed to run application", zap.Error(err))
+				r.getLogger().Error("Failed to run application", zap.Error(err))
 				return
 			}
 		},
 	}
 	r.cmd = cmd
 	return r, nil
+}
+
+func (r *rootCmd) getLogger() dependencies.Logger {
+	if r == nil {
+		return defaultLogger
+	}
+	if r.logger == nil {
+		r.logger = defaultLogger
+	}
+	return r.logger
 }
